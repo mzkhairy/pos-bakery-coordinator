@@ -1,2 +1,2 @@
-export { TransactionModel } from './Transaction.model';
-export { TransactionLogModel } from './TransactionLog.model';
+export * from './Transaction.model';
+export * from './TransactionLog.model';
