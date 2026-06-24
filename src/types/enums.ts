@@ -41,3 +41,8 @@ export enum AbortReason {
   PARTICIPANT_REJECTED = 'PARTICIPANT_REJECTED',
   UNKNOWN = 'UNKNOWN',
 }
+
+export enum ParticipantRole {
+  SOURCE = 'source',
+  DESTINATION = 'destination',
+}

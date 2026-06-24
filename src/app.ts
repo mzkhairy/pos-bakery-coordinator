@@ -1,5 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv';
+import transferRoutes from './routes/transfer.routes';
+import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
 
@@ -16,8 +18,9 @@ app.get('/health', (_req: Request, res: Response) => {
   });
 });
 
-// Routes — akan diimport di Phase 05
-// import transferRoutes from './routes/transfer.routes';
-// app.use('/api', transferRoutes);
+app.use('/api', transferRoutes);
+
+// Error handler (harus paling akhir)
+app.use(errorHandler);
 
 export default app;
