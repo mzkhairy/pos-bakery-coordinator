@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { coordinatorService } from '../services/coordinator.service';
-import { TransferMaterialRequest } from '../types';
+import { TransferMaterialRequest, CoordinatorState } from '../types';
 import { logger } from '../utils/logger';
 
 export class TransferController {
@@ -67,6 +67,42 @@ export class TransferController {
       res.status(200).json(tx);
     } catch (error) {
       logger.error('getTransaction error', { error });
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  /**
+   * GET /api/2pc/decision/:txId
+   * Dipanggil oleh participant recovery untuk tahu keputusan coordinator
+   */
+  async getDecisionForParticipant(req: Request, res: Response): Promise<void> {
+    try {
+      const { txId } = req.params;
+      const tx = await coordinatorService.getTransaction(txId);
+
+      if (!tx) {
+        res.status(200).json({ tx_id: txId, decision: 'UNKNOWN' });
+        return;
+      }
+
+      let decision: 'COMMIT' | 'ABORT' | 'UNKNOWN';
+
+      switch (tx.state) {
+        case CoordinatorState.COMMITTED:
+        case CoordinatorState.COMMITTING:
+          decision = 'COMMIT';
+          break;
+        case CoordinatorState.ABORTED:
+        case CoordinatorState.ABORTING:
+          decision = 'ABORT';
+          break;
+        default:
+          decision = 'UNKNOWN';
+      }
+
+      res.status(200).json({ tx_id: txId, decision });
+    } catch (error) {
+      logger.error('getDecisionForParticipant error', { error });
       res.status(500).json({ error: 'Internal server error' });
     }
   }

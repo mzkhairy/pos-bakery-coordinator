@@ -1,13 +1,14 @@
 import app from './app';
 import { connectDatabase } from './config/database';
-// import { runCoordinatorRecovery } from './recovery/coordinatorRecovery'; // Phase 06
+import { runCoordinatorRecovery } from './recovery/coordinatorRecovery';
 
 const PORT = parseInt(process.env.PORT || '5000', 10);
 
 async function bootstrap(): Promise<void> {
   await connectDatabase();
 
-  // await runCoordinatorRecovery(); // aktifkan di Phase 06
+  // Jalankan recovery sebelum mulai menerima request
+  await runCoordinatorRecovery();
 
   app.listen(PORT, () => {
     console.log(`[Coordinator] Running on port ${PORT}`);

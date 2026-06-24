@@ -11,4 +11,9 @@ router.get('/transactions/:txId', (req, res) =>
   transferController.getTransaction(req, res)
 );
 
+// Decision endpoint untuk participant recovery
+router.get('/2pc/decision/:txId', (req, res) =>
+  transferController.getDecisionForParticipant(req, res)
+);
+
 export default router;
