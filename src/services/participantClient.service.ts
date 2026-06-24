@@ -45,7 +45,7 @@ export class ParticipantClientService {
       return { branch: branchId, vote, reason: response.data.reason };
     } catch (error) {
       const axiosErr = error as AxiosError;
-      const isTimeout = axiosErr.code === 'ECONNABORTED' || axiosErr.code === 'ETIMEDOUT';
+      const isTimeout = axiosErr.code === 'ECONNABORTED' || axiosErr.code === 'ETIMEDOUT' || axiosErr.code === 'ECONNREFUSED';
 
       logger.warn(`canCommit failed for ${branchId}`, {
         tx_id: params.tx_id,
