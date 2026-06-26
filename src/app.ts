@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import transferRoutes from './routes/transfer.routes';
+import proxyRoutes from './routes/proxy.routes';
 import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
@@ -19,6 +20,7 @@ app.get('/health', (_req: Request, res: Response) => {
 });
 
 app.use('/api', transferRoutes);
+app.use('/api/proxy', proxyRoutes);
 
 // Error handler (harus paling akhir)
 app.use(errorHandler);
